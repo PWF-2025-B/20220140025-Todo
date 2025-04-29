@@ -71,7 +71,40 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <a href="{{ route('users.show', $user->id) }}" class="text-blue-500 hover:underline">Show</a>
+                            {{-- Link to User Show --}}
+                            <a href="{{ route('users.show', $user->id) }}" class="text-blue-500 hover:underline mr-2">Show</a>
+
+                            {{-- Admin Buttons --}}
+                            <div class="flex space-x-3 mt-2">
+                                @if ($user->is_admin)
+                                    <form action="{{ route('user.removeadmin', $user) }}" method="Post">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="text-blue-600 dark:text-blue-400 whitespace-nowrap">
+                                            Remove Admin
+                                        </button>
+                                    </form>
+                                @else
+                                    <form action="{{ route('user.makeadmin', $user) }}" method="Post">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="text-red-600 dark:text-red-400 whitespace-nowrap">
+                                            Make Admin
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+
+                            {{-- Delete User Button --}}
+                            <div class="mt-2">
+                                <form action="{{ route('user.destroy', $user) }}" method="Post">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit" class="text-red-600 dark:text-red-400 whitespace-nowrap">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @endforeach
