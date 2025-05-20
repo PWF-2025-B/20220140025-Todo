@@ -53,6 +53,7 @@
                     <th scope="col" class="px-6 py-3">ID</th>
                     <th scope="col" class="px-6 py-3">Name</th>
                     <th scope="col" class="px-6 py-3">Email</th>
+                    <th scope="col" class="px-6 py-3">Todos</th>
                     <th scope="col" class="px-6 py-3">Status</th>
                     <th scope="col" class="px-6 py-3">Action</th>
                 </tr>
@@ -63,6 +64,24 @@
                         <td class="px-6 py-4">{{ $user->id }}</td>
                         <td class="px-6 py-4">{{ $user->name }}</td>
                         <td class="px-6 py-4">{{ $user->email }}</td>
+                        <td class="px-6 py-4">
+                            @if ($user->todos->isNotEmpty())
+                                <ul class="list-disc list-inside space-y-1">
+                                    @foreach ($user->todos as $todo)
+                                        <li>
+                                            {{ $todo->title }}
+                                            @if ($todo->is_done)
+                                                <span class="text-green-500 text-xs">(done)</span>
+                                            @else
+                                                <span class="text-yellow-500 text-xs">(pending)</span>
+                                            @endif
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <span class="italic text-gray-400 text-sm">No todos</span>
+                            @endif
+                        </td>
                         <td class="px-6 py-4">
                             @if ($user->is_active)
                                 Active

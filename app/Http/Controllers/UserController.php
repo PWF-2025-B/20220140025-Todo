@@ -9,9 +9,23 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::where('id', '!=', 1)
-            ->orderBy('name')
-            ->paginate(10);
+        $search = request('search');
+
+        if ($search) {
+            $users = User::with('todos')
+                ->where(function ($query) use ($search) {
+                    $query->where('name', 'like', '%' . $search . '%')
+                          ->orWhere('email', 'like', '%' . $search . '%');
+                })
+                ->where('id', '!=', 1)
+                ->orderBy('name')
+                ->paginate(10);
+        } else {
+            $users = User::with('todos')
+                ->where('id', '!=', 1)
+                ->orderBy('name')
+                ->paginate(10);
+        }
 
         return view('user.index', compact('users'));
     }

@@ -10,8 +10,10 @@
             <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
                 <div class="p-6 text-xl text-gray-900 dark:text-gray-100">
                     <div class="flex items-center justify-between">
+                        {{-- Tombol Create --}}
                         <x-create-button href="{{ route('category.create') }}" />
 
+                        {{-- Notifikasi --}}
                         <div>
                             @if (session('success'))
                                 <p x-data="{ show: true }" x-show="show" x-transition
@@ -32,7 +34,7 @@
                     </div>
                 </div>
 
-                <!-- Tambahkan margin top agar tabel agak turun dari header -->
+                {{-- Tabel Category --}}
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-6">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -51,13 +53,16 @@
                                         </a>
                                     </td>
                                     <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                                        {{ $category->todos ? $category->todos->count() : 0 }}
+                                        {{ $category->todos->count() }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        <form action="{{ route('category.destroy', $category) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?')">
+                                        <form action="{{ route('category.destroy', $category) }}" method="POST"
+                                              onsubmit="return confirm('Are you sure you want to delete this category?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 dark:text-red-400">Delete</button>
+                                            <button type="submit" class="text-red-600 dark:text-red-400">
+                                                Delete
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>

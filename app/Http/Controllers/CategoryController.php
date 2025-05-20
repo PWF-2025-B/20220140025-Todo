@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -12,11 +13,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        // Eager load the 'todos' relationship to avoid null errors
-        $categories = Category::with('todos')  // Ensure you're using 'todos' in the relation
-            ->where('user_id', auth()->user()->id)
+        // Eager load todos to avoid N+1 problem
+        $categories = Category::with('todos')
+            ->where('user_id', Auth::id())
             ->get();
-    
+
         return view('category.index', compact('categories'));
     }
 
@@ -38,7 +39,7 @@ class CategoryController extends Controller
         ]);
 
         Category::create([
-            'user_id' => auth()->user()->id,
+            'user_id' => Auth::id(),
             'title'   => $request->title,
         ]);
 
@@ -51,7 +52,8 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        // Not implemented
+        // Optional: return abort if not used
+        return abort(404);
     }
 
     /**
@@ -59,7 +61,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        if (auth()->user()->id === $category->user_id) {
+        if (Auth::id() === $category->user_id) {
             return view('category.edit', compact('category'));
         }
 
@@ -72,6 +74,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+        if (Auth::id() !== $category->user_id) {
+            return redirect()->route('category.index')
+                ->with('danger', 'You are not authorized to update this category!');
+        }
+
         $request->validate([
             'title' => 'required|max:255',
         ]);
@@ -89,7 +96,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        if (auth()->user()->id === $category->user_id) {
+        if (Auth::id() === $category->user_id) {
             $category->delete();
 
             return redirect()->route('category.index')
@@ -99,4 +106,4 @@ class CategoryController extends Controller
         return redirect()->route('category.index')
             ->with('danger', 'You are not authorized to delete this category!');
     }
-}   
+}
