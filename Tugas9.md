@@ -1,9 +1,9 @@
 # Tugas 9
 
 ## 1. Browser Todo
-![alt text](<screenshot/Tugas9/Tugas9 Todo.png>)
+![alt text](<screenshot/Tugas9/Tugas9 todo.png>)
 
 ## 2. Browser Category
-![alt text](<sscreenshot/Tugas9/Tugas9 Category.png>)
+![alt text](<screenshot/Tugas9/Tugas9 category.png>)
 
 
